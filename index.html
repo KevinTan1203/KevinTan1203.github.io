@@ -675,8 +675,75 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 /* ============================================================
    REVEAL ANIMATIONS
    ============================================================ */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s, transform .6s; }
-.reveal.in { opacity: 1; transform: none; }
+/* ============================================================
+   SCROLL REVEALS — multiple entrance styles
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Fade up (default) */
+.reveal-up { transform: translateY(28px); }
+
+/* Fade down */
+.reveal-down { transform: translateY(-28px); }
+
+/* Slide from left */
+.reveal-left { transform: translateX(-40px); }
+
+/* Slide from right */
+.reveal-right { transform: translateX(40px); }
+
+/* Zoom in */
+.reveal-zoom { transform: scale(0.92); }
+
+/* Zoom + slight rise */
+.reveal-zoom-up { transform: scale(0.9) translateY(20px); }
+
+/* Soft blur entrance */
+.reveal-blur {
+  transform: translateY(16px);
+  filter: blur(8px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-blur.in { filter: blur(0); }
+
+/* Stagger helpers — delay children */
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+
+/* Section head always fades up a bit softer */
+.section-head.reveal { transform: translateY(18px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-up,
+  .reveal-down,
+  .reveal-left,
+  .reveal-right,
+  .reveal-zoom,
+  .reveal-zoom-up,
+  .reveal-blur {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
 
 /* ============================================================
    RESPONSIVE
@@ -758,7 +825,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- SNAPSHOT -->
 <section id="snapshot">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">02</span>
       <span class="section-title">Professional Snapshot</span>
       <span class="section-rule"></span>
@@ -770,7 +837,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- WHAT I DO -->
 <section id="about">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">03</span>
       <span class="section-title">What I Do</span>
       <span class="section-rule"></span>
@@ -782,7 +849,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- EXPERIENCE -->
 <section id="experience">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">04</span>
       <span class="section-title">Career Timeline</span>
       <span class="section-rule"></span>
@@ -794,14 +861,14 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- NOTABLE ACHIEVEMENT -->
 <section id="spotlight">
   <div class="container">
-    <div class="spotlight reveal" id="spotlightCard"></div>
+    <div class="spotlight reveal reveal-blur" id="spotlightCard"></div>
   </div>
 </section>
 
 <!-- EDUCATION -->
 <section id="education">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">05</span>
       <span class="section-title">Education</span>
       <span class="section-rule"></span>
@@ -813,7 +880,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- CERTIFICATIONS -->
 <section id="certifications">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">06</span>
       <span class="section-title">Certifications &amp; Credentials</span>
       <span class="section-rule"></span>
@@ -825,7 +892,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- QUANT -->
 <section id="quant">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">07</span>
       <span class="section-title">Quantitative Research</span>
       <span class="section-rule"></span>
@@ -839,7 +906,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
         </div>
       </div>
       <div>
-        <div class="sharpe-card">
+        <div class="sharpe-card reveal reveal-zoom">
           <div class="sharpe-label">Backtest Sharpe Ratio (best variant)</div>
           <div class="sharpe-value" id="sharpeValue">0.0</div>
           <div class="sharpe-note">Market Neutral · 50 Crypto Pairs · 0.9–1.5 range across variants · Net of Costs &amp; Slippage</div>
@@ -866,7 +933,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- PROJECTS -->
 <section id="projects">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">08</span>
       <span class="section-title">Project Explorer</span>
       <span class="section-rule"></span>
@@ -879,7 +946,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- SKILLS -->
 <section id="skills">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">09</span>
       <span class="section-title">Skills Dashboard</span>
       <span class="section-rule"></span>
@@ -892,7 +959,7 @@ section { padding: 64px 0; position: relative; z-index: 1; }
 <!-- CURRENTLY -->
 <section id="currently">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal reveal-up">
       <span class="section-num">10</span>
       <span class="section-title">Currently</span>
       <span class="section-rule"></span>
@@ -1493,7 +1560,7 @@ function renderKpis() {
   grid.innerHTML = '';
   SITE_CONFIG.kpis.forEach(k => {
     grid.appendChild(el(`
-      <div class="kpi reveal">
+      <div class="kpi reveal reveal-up reveal-d${(i % 5) + 1}">
         <div class="kpi-label">${k.label}</div>
         <div class="kpi-value">${k.value}</div>
         <div class="kpi-sub">${k.sub}</div>
@@ -1505,8 +1572,9 @@ function renderPillars() {
   const grid = document.getElementById('pillars');
   grid.innerHTML = '';
   SITE_CONFIG.pillars.forEach(p => {
+    const motion = ['reveal-left', 'reveal-zoom', 'reveal-right'][i] || 'reveal-up';
     grid.appendChild(el(`
-      <div class="pillar reveal">
+      <div class="pillar reveal ${motion} reveal-d${i + 1}">
         <div class="pillar-icon">${ICONS[p.icon] || ''}</div>
         <h3>${p.title}</h3>
         <p>${p.text}</p>
@@ -1519,7 +1587,7 @@ function renderTimeline() {
   tl.innerHTML = '';
   SITE_CONFIG.experience.forEach((e, i) => {
     const node = el(`
-      <div class="tl-node reveal" data-i="${i}">
+      <div class="tl-node reveal reveal-left" data-i="${i}">
         <div class="tl-head">
           <div>
             <div class="tl-year">${e.year}</div>
@@ -1565,7 +1633,7 @@ function renderEducation() {
   grid.innerHTML = '';
   SITE_CONFIG.education.forEach(e => {
     grid.appendChild(el(`
-      <div class="edu-card reveal">
+      <div class="edu-card reveal reveal-up reveal-d${(i % 4) + 1}">
         <div class="edu-head">
           <div>
             <div class="edu-degree">${e.degree}</div>
@@ -1585,7 +1653,7 @@ function renderCertifications() {
   grid.innerHTML = '';
   SITE_CONFIG.certifications.forEach(c => {
     grid.appendChild(el(`
-      <div class="cert-card reveal">
+      <div class="cert-card reveal reveal-up reveal-d${(i % 5) + 1}">
         <div class="cert-title">${c.title}</div>
         <div class="cert-issuer">${c.issuer}</div>
         <div class="cert-date">${c.date}</div>
@@ -1668,7 +1736,7 @@ function filterProjects(f) {
   list.forEach(p => {
     if (p.featured) {
       grid.appendChild(el(`
-        <div class="project-card featured reveal" data-id="${p.id}">
+        <div class="project-card featured reveal reveal-up reveal-d${(idx % 3) + 1}" data-id="${p.id}">
           <div class="featured-left">
             <div class="pc-cat">${p.category} · Featured</div>
             <div class="pc-title" style="font-size:20px">${p.title}</div>
@@ -1685,7 +1753,7 @@ function filterProjects(f) {
         </div>`));
     } else {
       grid.appendChild(el(`
-        <div class="project-card reveal" data-id="${p.id}">
+        <div class="project-card reveal reveal-zoom-up" data-id="${p.id}">
           <div class="pc-cat">${p.category}</div>
           <div class="pc-title">${p.title}</div>
           <div class="pc-co">${p.company} · ${p.date}</div>
@@ -1762,7 +1830,7 @@ function renderCurrently() {
   grid.innerHTML = '';
   SITE_CONFIG.currently.forEach(c => {
     grid.appendChild(el(`
-      <div class="curr-card reveal">
+      <div class="curr-card reveal reveal-up reveal-d${(i % 4) + 1}">
         <div class="curr-label">${c.label}</div>
         <div class="curr-value">${c.value}</div>
         <div class="curr-sub">${c.sub}</div>
@@ -1888,11 +1956,23 @@ function animateNumber(node, from, to, decimals, dur) {
 }
 
 function observeReveals() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal').forEach(x => x.classList.add('in'));
+    return;
+  }
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('.reveal:not(.in)').forEach(x => io.observe(x));
 }
+
+
+
 
 /* ============================================================
    NAV — mobile + active highlight
