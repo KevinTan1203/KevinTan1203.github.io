@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kevin Tan YueJun — Quantitative Finance Terminal</title>
+<meta name="description" content="Kevin Tan YueJun — Markets × Quantitative Research × Technology. Institutional digital-asset & FX execution, Global Markets technology, and systematic trading research. NUS B.Sc. (Hons, Distinction), Wall Street Quants Certificate in Quantitative Finance." />
+<style>
+/* ============================================================
+   THEME CONFIGURATION
+   Edit themes here. Add new themes by adding an entry and
+   referencing it via data-theme on <html>.
+   ============================================================ */
+:root,
+:root[data-theme="dark"] {
+  --bg: #0a0d12;
+  --bg-elev: #10151c;
+  --card: #131922;
+  --card-elev: #18202b;
+  --border: #1f2937;
+  --border-soft: #161e28;
+  --text: #e6edf3;
+  --text-dim: #8b97a7;
+  --text-faint: #5a6675;
+  --accent: #4ade80;
+  --accent-soft: rgba(74,222,128,0.12);
+  --accent-glow: rgba(74,222,128,0.35);
+  --neg: #f87171;
+  --pos: #4ade80;
+  --warn: #fbbf24;
+  --grid-line: rgba(255,255,255,0.04);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --motion: 1;
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f8fa;
+  --bg-elev: #ffffff;
+  --card: #ffffff;
+  --card-elev: #fcfcfd;
+  --border: #e5e7eb;
+  --border-soft: #eef0f3;
+  --text: #0f172a;
+  --text-dim: #475569;
+  --text-faint: #94a3b8;
+  --accent: #059669;
+  --accent-soft: rgba(5,150,105,0.10);
+  --accent-glow: rgba(5,150,105,0.25);
+  --neg: #dc2626;
+  --pos: #059669;
+  --warn: #d97706;
+  --grid-line: rgba(0,0,0,0.04);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --motion: 1;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Subtle grid backdrop */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.mono { font-family: var(--font); }
+.dim { color: var(--text-dim); }
+.faint { color: var(--text-faint); }
+.accent { color: var(--accent); }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-soft);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  gap: 16px;
+}
+.nav-brand {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-brand .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+.nav-links { display: flex; gap: 4px; align-items: center; }
+.nav-links a {
+  font-family: var(--font);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--accent-soft); }
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  transition: all .2s;
+}
+.icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all .2s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn-primary { background: var(--accent); color: #0a0d12; border-color: var(--accent); font-weight: 600; }
+.btn-primary:hover { color: #0a0d12; filter: brightness(1.08); }
+
+.menu-toggle { display: none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  padding: 96px 0 64px;
+  position: relative;
+}
+.hero-tag {
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-tag::before {
+  content: ""; width: 24px; height: 1px; background: var(--accent);
+}
+.hero h1 {
+  font-size: clamp(40px, 7vw, 76px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  margin-bottom: 18px;
+}
+.hero h1 .blink { color: var(--accent); }
+.hero-sub {
+  font-family: var(--font);
+  font-size: clamp(14px, 2vw, 19px);
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+  margin-bottom: 24px;
+}
+.hero-bio {
+  max-width: 620px;
+  font-size: 15.5px;
+  color: var(--text-dim);
+  margin-bottom: 28px;
+}
+.hero-role {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  margin-bottom: 32px;
+}
+.hero-role .pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--pos);
+  box-shadow: 0 0 8px var(--pos);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.hero-links { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+section { padding: 64px 0; position: relative; z-index: 1; }
+.section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 36px; }
+.section-num {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.section-rule { flex: 1; height: 1px; background: var(--border-soft); }
+
+/* ============================================================
+   SNAPSHOT KPIs
+   ============================================================ */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.kpi:hover::before { opacity: 1; }
+.kpi-label {
+  font-family: var(--font);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+.kpi-value {
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+.kpi-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+
+/* ============================================================
+   PILLARS — WHAT I DO
+   ============================================================ */
+.pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.pillar {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  transition: transform .3s, border-color .3s;
+}
+.pillar:hover { transform: translateY(-4px); border-color: var(--accent); }
+.pillar-icon {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+.pillar h3 { font-family: var(--font); font-size: 13px; letter-spacing: 0.14em; margin-bottom: 10px; }
+.pillar p { font-size: 14px; color: var(--text-dim); }
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px;
+  width: 1px; background: var(--border);
+}
+.tl-node {
+  position: relative;
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.tl-node:hover { border-color: var(--accent); }
+.tl-node::before {
+  content: ""; position: absolute; left: -25px; top: 22px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--text-faint);
+  transition: all .2s;
+}
+.tl-node.active::before, .tl-node:hover::before { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+.tl-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; gap: 12px; }
+.tl-year { font-family: var(--font); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; }
+.tl-role { font-weight: 600; font-size: 15px; }
+.tl-co { font-family: var(--font); font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.tl-chevron { color: var(--text-faint); transition: transform .3s; }
+.tl-node.active .tl-chevron { transform: rotate(180deg); color: var(--accent); }
+.tl-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .35s ease;
+}
+.tl-node.active .tl-body { max-height: 600px; }
+.tl-body-inner { padding: 0 18px 18px; border-top: 1px solid var(--border-soft); padding-top: 16px; }
+.tl-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 14px; }
+.tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag {
+  font-family: var(--font);
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.tl-section-label { font-family: var(--font); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
+
+/* ============================================================
+   QUANT DASHBOARD
+   ============================================================ */
+.quant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.qspec { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.qspec-item {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.qspec-label { font-family: var(--font); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+.qspec-value { font-size: 13.5px; font-weight: 500; }
+.sharpe-card {
+  background: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.sharpe-card::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 60%);
+  pointer-events: none;
+}
+.sharpe-label { font-family: var(--font); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+.sharpe-value { font-family: var(--font); font-size: 64px; font-weight: 700; color: var(--accent); line-height: 1; margin: 10px 0; letter-spacing: -0.04em; }
+.sharpe-note { font-family: var(--font); font-size: 11px; color: var(--text-dim); letter-spacing: 0.04em; }
+
+/* Strategy architecture flow */
+.flow { display: flex; flex-direction: column; gap: 0; }
+.flow-step {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+.flow-step + .flow-step { margin-top: 18px; }
+.flow-step + .flow-step::before {
+  content: ""; position: absolute; left: 18px; top: -18px; height: 18px; width: 1px; background: var(--accent); opacity: .4;
+}
+.flow-num { font-family: var(--font); font-size: 11px; color: var(--accent); width: 24px; }
+.flow-label { font-size: 13.5px; font-weight: 500; }
+.flow-desc { font-size: 11.5px; color: var(--text-dim); margin-left: auto; }
+
+/* ============================================================
+   PROJECT EXPLORER
+   ============================================================ */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.filter-btn {
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  transition: all .2s;
+}
+.filter-btn:hover { color: var(--text); }
+.filter-btn.active { background: var(--accent); color: #0a0d12; border-color: var(--accent); font-weight: 600; }
+
+.projects { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex; flex-direction: column;
+  transition: transform .25s, border-color .25s;
+  cursor: pointer;
+}
+.project-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.pc-cat { font-family: var(--font); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.pc-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.pc-co { font-family: var(--font); font-size: 11.5px; color: var(--text-dim); margin-bottom: 12px; }
+.pc-desc { font-size: 13px; color: var(--text-dim); flex: 1; margin-bottom: 14px; }
+.pc-result { font-family: var(--font); font-size: 12px; color: var(--accent); margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+.pc-tech { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+
+/* featured quant project */
+.project-card.featured { grid-column: span 3; display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; padding: 0; overflow: hidden; }
+.featured-left { padding: 28px; }
+.featured-right { padding: 28px; background: var(--bg-elev); border-left: 1px solid var(--border-soft); display:flex; flex-direction:column; justify-content:center; }
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+.skills-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.skill-group {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.skill-group h4 {
+  font-family: var(--font); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.skill-group h4::after { content:""; flex:1; height:1px; background: var(--border-soft); }
+.skill-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.skill-chip {
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 6px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .2s;
+}
+.skill-chip:hover, .skill-chip.selected { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.skill-info {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-dim);
+  min-height: 20px;
+  display: none;
+}
+.skill-info.show { display: block; }
+
+/* ============================================================
+   EDUCATION
+   ============================================================ */
+.edu-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.edu-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 22px; }
+.edu-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.edu-degree { font-weight: 600; font-size: 15.5px; }
+.edu-school { font-family: var(--font); font-size: 12.5px; color: var(--accent); margin-top: 2px; }
+.edu-period { font-family: var(--font); font-size: 11.5px; color: var(--text-faint); white-space: nowrap; }
+.edu-detail { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
+.edu-extra { font-size: 12.5px; color: var(--text-dim); margin-top: 6px; }
+.edu-extra strong { color: var(--text); }
+
+/* ============================================================
+   CERTIFICATIONS
+   ============================================================ */
+.cert-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.cert-card { background: var(--card); border: 1px solid var(--border-soft); border-left: 2px solid var(--accent); border-radius: var(--radius); padding: 18px; }
+.cert-title { font-weight: 600; font-size: 13.5px; margin-bottom: 4px; }
+.cert-issuer { font-family: var(--font); font-size: 11.5px; color: var(--accent); }
+.cert-date { font-family: var(--font); font-size: 11px; color: var(--text-faint); margin-top: 6px; }
+
+/* ============================================================
+   ACHIEVEMENT SPOTLIGHT
+   ============================================================ */
+.spotlight { background: var(--card); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 30px; }
+.spotlight-head { display:flex; align-items:center; gap: 10px; margin-bottom: 14px; }
+.spotlight-badge { font-family: var(--font); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0d12; background: var(--accent); padding: 4px 10px; border-radius: 4px; font-weight: 700; }
+.spotlight-title { font-size: 17px; font-weight: 600; }
+.spotlight p { font-size: 13.5px; color: var(--text-dim); margin-bottom: 12px; }
+.spotlight p:last-of-type { margin-bottom: 0; }
+.spotlight a { color: var(--accent); }
+.spotlight a:hover { text-decoration: underline; }
+
+/* ============================================================
+   CURRENTLY
+   ============================================================ */
+.currently-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.curr-card {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.curr-label { font-family: var(--font); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+.curr-value { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.curr-sub { font-size: 12.5px; color: var(--text-dim); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact { text-align: center; padding: 80px 0; }
+.contact h2 { font-size: clamp(28px,5vw,44px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 14px; }
+.contact p { color: var(--text-dim); margin-bottom: 28px; max-width: 520px; margin-left:auto; margin-right:auto; }
+.contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.contact-link {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 12px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 12.5px;
+  transition: all .2s;
+}
+.contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--border-soft);
+  padding: 24px 0;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--text-faint);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 680px;
+  width: 100%;
+  padding: 32px;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 18px;
+  color: var(--text-dim);
+}
+.modal-close:hover { color: var(--accent); border-color: var(--accent); }
+.modal-cat { font-family: var(--font); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.modal h3 { font-size: 22px; margin-bottom: 6px; }
+.modal-co { font-family: var(--font); font-size: 13px; color: var(--text-dim); margin-bottom: 18px; }
+.modal p { font-size: 14px; color: var(--text-dim); margin-bottom: 16px; }
+.modal h4 { font-family: var(--font); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin: 18px 0 8px; }
+.modal .pc-tech { margin-bottom: 14px; }
+
+/* ============================================================
+   RESUME OVERLAY
+   ============================================================ */
+.resume-overlay { }
+.resume-overlay .modal { max-width: 820px; padding: 40px; }
+.resume-section { margin-bottom: 26px; }
+.resume-section h4 {
+  font-family: var(--font); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px; border-bottom: 1px solid var(--border-soft); padding-bottom: 8px;
+}
+.resume-item { margin-bottom: 14px; }
+.resume-item-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.resume-item-title { font-weight: 600; font-size: 14px; }
+.resume-item-co { font-family: var(--font); font-size: 12px; color: var(--text-dim); }
+.resume-item-date { font-family: var(--font); font-size: 11px; color: var(--text-faint); }
+.resume-item-desc { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+.resume-actions { display: flex; gap: 10px; margin-top: 22px; }
+
+/* ============================================================
+   TERMINAL EASTER EGG
+   ============================================================ */
+.term-fab {
+  position: fixed; bottom: 20px; right: 20px; z-index: 90;
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text-dim);
+  transition: all .2s;
+}
+.term-fab:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 14px var(--accent-glow); }
+.terminal {
+  position: fixed; bottom: 20px; right: 20px; z-index: 150;
+  width: 440px; max-width: calc(100vw - 40px);
+  height: 340px;
+  background: #06080c;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  font-family: var(--font);
+}
+.terminal.show { display: flex; }
+.term-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #1f2937;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.term-screen {
+  flex: 1; padding: 12px; overflow-y: auto; font-size: 12px; line-height: 1.55;
+  color: #c8d3e0;
+}
+.term-line { white-space: pre-wrap; word-break: break-word; }
+.term-prompt { color: var(--accent); }
+.term-input-line { display: flex; gap: 6px; align-items: center; padding: 8px 12px; border-top: 1px solid #1f2937; }
+.term-input-line input {
+  flex: 1; background: none; border: none; outline: none;
+  color: #e6edf3; font-family: var(--font); font-size: 12px;
+}
+.term-input-line .prompt { color: var(--accent); }
+
+/* ============================================================
+   REVEAL ANIMATIONS
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s, transform .6s; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .kpis { grid-template-columns: repeat(2,1fr); }
+  .pillars { grid-template-columns: 1fr; }
+  .quant-grid { grid-template-columns: 1fr; }
+  .projects { grid-template-columns: repeat(2,1fr); }
+  .project-card.featured { grid-column: span 2; grid-template-columns: 1fr; }
+  .featured-right { border-left: none; border-top: 1px solid var(--border-soft); }
+  .skills-grid { grid-template-columns: 1fr; }
+  .currently-grid { grid-template-columns: repeat(2,1fr); }
+  .cert-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; flex-direction: column; background: var(--bg-elev); border-bottom: 1px solid var(--border); padding: 8px; }
+  .nav-links.open { display: flex; }
+  .menu-toggle { display: inline-flex; }
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .projects { grid-template-columns: 1fr; }
+  .project-card.featured { grid-column: span 1; }
+  .currently-grid { grid-template-columns: 1fr; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .hero { padding: 60px 0 40px; }
+  section { padding: 48px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#home" class="nav-brand"><span class="dot"></span> KEVIN TAN // QUANT, SOFTWARE ENGINEER</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#quant">Quant</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg id="themeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/></svg>
+      </button>
+      <button class="btn" id="resumeBtn">Resume</button>
+      <a class="icon-btn" id="navLinkedin" href="#" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-3-1.8-3s-2 1.4-2 2.9V21H9z"/></svg>
+      </a>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <div class="container">
+    <div class="hero-tag">Personal Quantitative Finance Terminal</div>
+    <h1 id="heroName">KEVIN TAN YUEJUN<span class="blink">_</span></h1>
+    <div class="hero-sub" id="heroSub">Markets × Quantitative Research × Technology</div>
+    <p class="hero-bio" id="heroBio"></p>
+    <div class="hero-role" id="heroRole"></div>
+    <div class="hero-links" id="heroLinks"></div>
+  </div>
+</header>
+
+<!-- SNAPSHOT -->
+<section id="snapshot">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Professional Snapshot</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</section>
+
+<!-- WHAT I DO -->
+<section id="about">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">What I Do</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="pillars" id="pillars"></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Career Timeline</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<!-- NOTABLE ACHIEVEMENT -->
+<section id="spotlight">
+  <div class="container">
+    <div class="spotlight reveal" id="spotlightCard"></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Education</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="edu-grid" id="eduGrid"></div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <span class="section-title">Certifications &amp; Credentials</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="cert-grid" id="certGrid"></div>
+  </div>
+</section>
+
+<!-- QUANT -->
+<section id="quant">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <span class="section-title">Quantitative Research</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="quant-grid">
+      <div>
+        <div class="qspec" id="qspec"></div>
+        <div style="margin-top:24px">
+          <div class="tl-section-label">Strategy Architecture</div>
+          <div class="flow" id="flow" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <div>
+        <div class="sharpe-card">
+          <div class="sharpe-label">Backtest Sharpe Ratio (best variant)</div>
+          <div class="sharpe-value" id="sharpeValue">0.0</div>
+          <div class="sharpe-note">Market Neutral · 50 Crypto Pairs · 0.9–1.5 range across variants · Net of Costs &amp; Slippage</div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="tl-section-label">Portfolio Allocation (Conceptual)</div>
+          <div id="allocChart" style="margin-top:12px"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="tl-section-label">Risk Contribution</div>
+          <div id="riskChart" style="margin-top:12px"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="tl-section-label">Performance</div>
+          <div id="perfChart" style="margin-top:12px;padding:18px;background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-sm);font-size:13px;color:var(--text-dim);font-family:var(--font)">
+            Interactive performance data can be connected here. Architecture supports loading real backtest equity curves from JSON/CSV.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <span class="section-title">Project Explorer</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="projects" id="projectsGrid"></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">09</span>
+      <span class="section-title">Skills Dashboard</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="skills-grid" id="skillsGrid"></div>
+    <div class="skill-info" id="skillInfo"></div>
+  </div>
+</section>
+
+<!-- CURRENTLY -->
+<section id="currently">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-num">10</span>
+      <span class="section-title">Currently</span>
+      <span class="section-rule"></span>
+    </div>
+    <div class="currently-grid" id="currentlyGrid"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <h2>Let's Connect</h2>
+    <p>Open to conversations on systematic trading, market microstructure, quantitative research, and financial technology.</p>
+    <div class="contact-links" id="contactLinks"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px">
+    <span id="footerLeft">KEVIN.TAN // QUANT TERMINAL v1.0</span>
+    <span>Built as a single standalone HTML file · Vanilla JS · SVG</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- RESUME OVERLAY -->
+<div class="modal-overlay resume-overlay" id="resumeOverlay">
+  <div class="modal" id="resumeContent"></div>
+</div>
+
+<!-- TERMINAL -->
+<button class="term-fab" id="termFab" title="Open terminal" aria-label="Open terminal">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+</button>
+<div class="terminal" id="terminal">
+  <div class="term-bar">
+    <span>kevin@quant-terminal: ~</span>
+    <button id="termClose" style="color:var(--text-dim)">✕</button>
+  </div>
+  <div class="term-screen" id="termScreen"></div>
+  <div class="term-input-line">
+    <span class="prompt">$</span>
+    <input id="termInput" autocomplete="off" spellcheck="false" placeholder="type 'help'" />
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   SITE CONFIGURATION
+   All content is driven from this object. Edit here to change
+   the site without touching the UI code. Eventually this can be
+   split into /data/*.json files and fetched at runtime.
+   ============================================================ */
+const SITE_CONFIG = {
+  profile: {
+    name: "Kevin Tan",
+    headline: "Markets × Quantitative Research × Technology",
+    bio: "Markets-oriented professional working at the intersection of software engineering, applied analytics, and institutional trading — executing institutional digital-asset and FX flow, building Global Markets technology, and researching systematic trading strategies from first principles.",
+    bioLong: "An individual who is passionate about financial markets, quantitative finance, and the application of technology to trading. My career is built at the intersection of software engineering, applied analytics, and institutional trading, where I solve complex problems and make data-driven decisions. My current role as a Digital Assets and FX Trader at WX CAPITAL involves executing institutional OTC cryptocurrency and FX transactions — applying bps pricing, spread optimisation, VWAP execution, cross-venue arbitrage and market-neutral hedging across exchanges, FX providers and liquidity venues, while managing the end-to-end trade lifecycle. Prior to that, I spent two years as a Software Engineer in Global Markets & Enterprise Technology at UOB, building and supporting the bank's Shared Platform systems. I graduated from NUS with a B.Sc. (Hons, Distinction) in Business Analytics, specialising in Financial and Applied Analytics, as an NUS Merit Scholar. Alongside this, I continue to deepen my quantitative finance knowledge through independent research — including designing and backtesting systematic strategies across crypto, derivatives and equities. My interests span quantitative trading, market microstructure, execution algorithms, statistical arbitrage, portfolio construction, risk management and systematic investing — combining analytical thinking with software engineering to turn research into practical trading applications.",
+    currentRole: "Digital Assets & FX Execution Trader",
+    currentCompany: "WX CAPITAL PTE. LTD.",
+    location: "Singapore",
+    email: "[EMAIL]",
+    linkedin: "https://www.linkedin.com/in/kevarno-12/",
+    github: "https://github.com/KevinTan1203",
+    resume: "[RESUME_URL]"
+  },
+
+  kpis: [
+    { label: "Experience", value: "Global Markets + Trading", sub: "Institutional & Banking · Since 2020" },
+    { label: "Quant Research", value: "Statistical Arbitrage", sub: "Market-Neutral Strategies" },
+    { label: "Markets", value: "Digital Assets · FX", sub: "OTC Execution" },
+    { label: "Programming", value: "Python · SQL · Java", sub: "Quant, Blockchain & Engineering" },
+    { label: "Education", value: "NUS · B.Sc. (Hons, Distinction)", sub: "Business Analytics + Economics · GPA 4.62/5.0" }
+  ],
+
+  pillars: [
+    { icon: "trade", title: "TRADE", text: "Institutional digital-asset and FX execution, liquidity analysis, cross-venue arbitrage and market-neutral hedging." },
+    { icon: "research", title: "RESEARCH", text: "Systematic strategies, statistical arbitrage, portfolio construction, credit risk and quantitative modelling." },
+    { icon: "build", title: "BUILD", text: "Global Markets technology, data pipelines, backend systems, DevSecOps and quant research infrastructure." }
+  ],
+
+  experience: [
+    {
+      year: "Jul 2026 — Present",
+      role: "Digital Assets & FX Execution Trader",
+      company: "WX CAPITAL PTE. LTD.",
+      location: "Singapore · On-site",
+      description: "Execute institutional OTC cryptocurrency and FX transactions, quoting on a basis-point pricing framework with bid-ask spread optimisation and VWAP execution to deliver competitive pricing while controlling execution costs and market impact.",
+      responsibilities: [
+        "Quote and execute institutional OTC crypto and FX transactions, leveraging bps pricing, bid-ask spread optimisation and VWAP execution strategies to provide competitive pricing while controlling execution costs and market impact.",
+        "Execute cross-venue arbitrage and market-neutral hedging strategies across cryptocurrency exchanges, FX providers and liquidity venues, using liquidity analysis and pricing inefficiencies to optimise execution quality.",
+        "Oversee the end-to-end trade lifecycle — trade booking, settlement, reconciliation, fund transfers and FX conversions — collaborating with traders and operations teams to ensure accurate execution, efficient workflows and robust risk controls."
+      ],
+      technologies: ["Quantitative Analytics","Currency Arbitrage","OTC Execution","FX","Digital Assets","VWAP","Hedging","Liquidity Analysis","Market Microstructure"],
+      market: "Institutional counterparties · Crypto venues · FX providers"
+    },
+    {
+      year: "Jul 2024 – Jul 2026",
+      role: "Software Engineer — Global Markets & Enterprise Technology",
+      company: "United Overseas Bank (UOB)",
+      location: "Singapore · On-site",
+      description: "Developed and enhanced critical banking applications supporting the firm's Shared Platform systems within Global Markets, with hands-on exposure to infrastructure, financial systems, automation and DevOps across an enterprise-scale software stack.",
+      responsibilities: [
+        "Optimised the performance and scalability of Global Markets and Enterprise application systems using Java, SQL and Linux.",
+        "Provided tier 2/3 production support for real-time application systems, performing rapid root-cause analysis on application logs and database traces to restore service within strict SLAs.",
+        "Improved system robustness and operational risk controls by refactoring legacy components, resolving static analysis findings, and strengthening regression and interface testing to reduce production risk and enhance data reliability."
+      ],
+      technologies: ["Java","Python","SQL","Distributed Systems","Data Pipelines","REST APIs","Linux","Git","Jenkins","DevOps"],
+      market: "Global Markets · FICC · Shared Platform Systems"
+    },
+    {
+      year: "Jun 2023 – Aug 2023",
+      role: "Summer Analyst — FICC Risk & Pricing Technology",
+      company: "Barclays PLC",
+      location: "Singapore · On-site",
+      description: "Worked on FICC risk and pricing technology — streamlining pre-trade data delivery workflows and assessing delivery risk across pricing systems supporting fixed-income, currencies and commodities desks.",
+      responsibilities: [
+        "Analysed and streamlined pre-trade risk and pricing data delivery workflows, improving data availability and reliability for downstream FICC risk systems.",
+        "Conducted cross-functional delivery-risk assessments, identifying critical dependencies and failure points and developing contingency plans and revised timelines that increased execution reliability and operational efficiency."
+      ],
+      technologies: ["Project Management","Stakeholder Management","Python","SQL","Data Pipelines","Pre-trade Systems","FICC","Risk & Pricing"],
+      market: "FICC · Pre-trade · Risk & Pricing"
+    },
+    {
+      year: "Jan 2023 – Jun 2023",
+      role: "Software Developer Intern — Risk & Performance Management",
+      company: "GIC Pte Ltd",
+      location: "Singapore · On-site",
+      description: "Backend development on the Performance Blue Sky analytics platform, supporting portfolio performance attribution and risk reporting across global multi-asset investment portfolios.",
+      responsibilities: [
+        "Enhanced the Performance Blue Sky analytics platform supporting portfolio performance attribution and risk reporting across global multi-asset investment portfolios.",
+        "Optimised backend API services extracting, aggregating and serving large-scale performance and attribution data from the Eagle performance measurement system, improving query efficiency by ~30% through SQL optimisation and service-level refactoring.",
+        "Built automated data validation and integration pipelines to enforce consistency across upstream and downstream systems, reducing data-quality defects and deployment-related errors by ~25%."
+      ],
+      technologies: ["Python","SQL","Data Engineering","Test Automation","Investment Analytics","Portfolio Analytics","Risk"],
+      market: "Investment Analytics · Performance & Risk"
+    },
+    {
+      year: "May 2022 – Aug 2022",
+      role: "Risk Assurance Intern — Data Trust Services",
+      company: "PwC",
+      location: "Trust Bank (Singapore) · CapitaLand (Singapore) · On-site",
+      description: "Supported client data-governance and automation engagements spanning banking and real estate, from governance playbooks to real-time analytics dashboards.",
+      responsibilities: [
+        "Supported a data-governance project for Trust Bank by curating a playbook, defining stakeholder roles and analysing data lineage to enhance accountability, integrity and regulatory compliance.",
+        "Contributed to a real-time automation and visualisation dashboard for CapitaLand using SQL, Databricks and Power BI, enabling efficient data processing and actionable insights for stakeholders.",
+        "Gained hands-on experience in data governance, automation and visualisation, delivering practical solutions that improved client processes."
+      ],
+      technologies: ["Data Governance","Data Visualization","SQL","Databricks","Power BI"],
+      market: "Banking · Real Estate · Data Governance"
+    },
+    {
+      year: "May 2021 – Jul 2021",
+      role: "Data Engineer — Product Engineering",
+      company: "DataSpark",
+      location: "Comcentre, Singapore · On-site",
+      description: "Contributed to a competitive customer-experience programme benchmarking client and competitor performance across multiple regions to support strategic decision-making.",
+      responsibilities: [
+        "Contributed to the development of a competitive customer experience programme evaluating client and competitor performance across multiple regions, generating actionable insights to support strategic decision-making.",
+        "Applied advanced data-processing techniques, efficient algorithms and optimised data structures, improving runtime performance and enabling seamless handling of large datasets."
+      ],
+      technologies: ["Python","Java","Data Structures & Algorithms","Data Engineering"],
+      market: "Telco Analytics · Product Engineering"
+    },
+    {
+      year: "Feb 2020 – May 2020",
+      role: "Data Analyst — Product Engineering",
+      company: "DataSpark",
+      location: "Comcentre, Singapore · On-site",
+      description: "Analysed mobility and customer staypoint patterns using mobile network data to surface behavioural insights for product development.",
+      responsibilities: [
+        "Collaborated with the product engineering team to analyse mobility and customer staypoint patterns using mobile data from cell towers across multiple regions.",
+        "Leveraged geospatial tools (Kepler.gl, Python Geopandas, ArcGIS) to generate actionable insights into customer behaviour, supporting product development and business strategy."
+      ],
+      technologies: ["Data Analytics","Python","Kepler.gl","Geopandas","ArcGIS","Geospatial Analysis"],
+      market: "Telco Analytics · Geospatial Data"
+    },
+    {
+      year: "Jan 2018 – Nov 2019",
+      role: "Officer Commanding / Platoon Commander (2LT NSF → CPT NS)",
+      company: "Singapore Combat Engineers, Singapore Armed Forces (SAF)",
+      location: "Singapore",
+      description: "Led combat engineer platoons and, on reservist recall, commanded a full company — planning training and overseeing company-level operations for a 180-strong unit.",
+      responsibilities: [
+        "As Officer Commanding (NS, promoted to Captain 31 Jul 2024): curated the training programme and oversaw company-level operations for ICT1, coordinating 35 sergeants and officers leading a company of 180 men.",
+        "As a full-time NSF officer (2018–2019): served as Platoon Commander / Company 2IC, completed the Engineer Officer Advanced Course, and served as Conducting Officer for the National Day Parade 35SCE Mobile Column.",
+        "Awarded a Letter of Appreciation (2018) and named OCS Best Platoon Cadet (2018) as OCS Cadet Wing 2IC."
+      ],
+      technologies: ["Servant Leadership","Critical Thinking","Organization Skills","Team Leadership","Operations Planning"],
+      market: "Military Leadership · Operations"
+    }
+  ],
+
+  education: [
+    {
+      school: "National University of Singapore",
+      degree: "B.Sc. (Hons, Distinction) in Business Analytics, Minor in Economics",
+      period: "Aug 2020 – May 2024",
+      detail: "GPA: 4.62 / 5.0 — NUS Merit Scholar · Financial and Applied Analytics Specialisation",
+      extra: "Achievements: NUS Merit Scholarship · Financial Analytics (Distinction, 2024) · Applied Analytics (Distinction, 2024) · Top Student, Blockchain & Distributed Ledger Technologies (2024) · School of Computing Dean's List (2023) · NASA Exchange Scholarship (2022–2023) · Optiver Challenge Competition (2023)",
+      areas: ["Systematic Trading Strategies","Capital Markets Trading & Investment Analytics","Econometrics","Financial Risk Modelling","Blockchain & Distributed Ledger Technologies","Web & Alternative Data Mining"]
+    },
+    {
+      school: "University of Amsterdam",
+      degree: "Student Exchange Programme — Economics and Business",
+      period: "Aug 2022 – Dec 2022",
+      detail: "Grade: 8.1 / 10 — Faculty of Economics and Business, with a Machine Learning module in the Faculty of Science",
+      extra: "Exchange coursework: Environmental Economics · Money and Banking · Statistics 2 for Economics · Econometrics · Machine Learning (Leren)",
+      areas: ["Environmental Economics","Money and Banking","Statistics for Economics","Econometrics","Machine Learning"]
+    },
+    {
+      school: "St Andrew's Junior College",
+      degree: "GCE A-Levels — H2 Physics, H2 Chemistry, H2 Mathematics, H2 Economics (all A), H1 Project Work (A)",
+      period: "Jan 2016 – Nov 2017",
+      detail: "Grade: 87.5 / 90 — Talent Development Programme",
+      extra: "Awards: Jacob Ballas Scholars' Award (2017) · Ruth Wong Memorial Scholarship (2017) · Wong Tim Wah Scholarship (2016) · CDC-CCC Education Merit Award (2017)",
+      areas: ["Physics","Chemistry","Mathematics","Economics","Project Work"]
+    },
+    {
+      school: "Beatty Secondary School",
+      degree: "GCE O-Levels — Pure Science, Pure Mathematics, Combined Humanities",
+      period: "Jan 2012 – Dec 2015",
+      detail: "6 Distinctions — Low Cheng Lum Award for Excellence in the GCE O-Level Examination",
+      extra: "Awards: Edusave Scholarship (2012–2015) · Edusave Character Award (2015) · UNSW Global Mathematics — High Distinction (2013, 2014)",
+      areas: ["Mathematics","Science","Humanities"]
+    }
+  ],
+
+  certifications: [
+    { title: "Certificate in Quantitative Finance (Bootcamp)", issuer: "Wall Street Quants", date: "Issued Jul 2026" },
+    { title: "WSET Level 2 in Wines", issuer: "WSET", date: "Issued Jan 2026" },
+    { title: "DevSecOps Foundation", issuer: "DevOps Institute", date: "Issued Aug 2025 · Expires Aug 2028" },
+    { title: "DevOps Foundation", issuer: "DevOps Institute", date: "Issued Aug 2025 · Expires Aug 2028" },
+    { title: "Programming Foundations: Test-Driven Development", issuer: "LinkedIn Learning", date: "Issued Jul 2024" },
+    { title: "DevOps for Managers", issuer: "LinkedIn Learning", date: "Issued Jul 2024" },
+    { title: "Financial Analytics Specialisation (Distinction)", issuer: "National University of Singapore", date: "Issued Jan 2024" },
+    { title: "Applied Analytics (Distinction)", issuer: "National University of Singapore", date: "Issued Jan 2024" },
+    { title: "Blockchain Distributed Ledger Technologies — Top Student", issuer: "National University of Singapore", date: "Issued Jan 2024" },
+    { title: "AI For Industry® — Foundations in AI", issuer: "AI Singapore", date: "Issued Jun 2022" },
+    { title: "AI For Industry® — Literacy in AI", issuer: "AI Singapore", date: "Issued May 2022" },
+    { title: "Natural Language Processing", issuer: "Udemy", date: "Issued Dec 2021" }
+  ],
+
+  spotlight: {
+    badge: "Notable Achievement",
+    title: "Wall Street Quants — Quantitative Finance Bootcamp",
+    body: [
+      "Over 11 months as part of the Wall Street Quants Quantitative Finance Bootcamp — one of the most rewarding learning experiences in my journey into quantitative finance and systematic trading. Curated lectures deepened my understanding of market microstructure, quantitative research, portfolio construction, risk management and systematic trading strategies.",
+      "The capstone project was a highlight: designing and backtesting a systematic trading strategy from the ground up, moving through idea iteration, hypothesis validation and performance evaluation via backtesting — a research pipeline that shaped how I now approach quant research.",
+      "Resume optimisation sessions, personalised interview guidance and a library of 5,000+ interview questions compiled from 100+ top-tier firms were invaluable in preparing for the industry, contributing to two offers in Quantitative Development and Trading.",
+      "Thank you to mentors Eric and Kyle for their generosity with time and guidance, and to the wider WallStreetQuants mentee community for continuously sharing, challenging and refining ideas."
+    ],
+    link: { label: "Wall Street Quants on LinkedIn", url: "https://lnkd.in/dBydqkvh" }
+  },
+
+  projects: [
+    {
+      id: "stat-arb",
+      featured: true,
+      category: "Quant",
+      title: "Market Neutral Statistical Arbitrage Strategy",
+      company: "WallStreetQuants",
+      date: "Dec 2025 – Apr 2026",
+      description: "Cross-sectional and time-series momentum strategy across ~50 cryptocurrency pairs on Binance (2020–2025), built as a market-neutral long/short portfolio with volatility targeting and Equal Risk Contribution, validated walk-forward with grid-search hyperparameter optimisation and evaluated net of transaction costs and slippage using a custom Python backtesting framework.",
+      technologies: ["Python","Pandas","NumPy","scikit-learn","Backtesting","Grid Search","Volatility Targeting","ERC","Walk-Forward"],
+      result: "0.9 – 1.5 Sharpe net of transaction costs and slippage",
+      github: null,
+      full: [
+        "Universe: ~50 cryptocurrency pairs sourced from Binance, 2020–2025 historical data.",
+        "Signal: cross-sectional ranking combined with time-series momentum, tuned via grid-search hyperparameter optimisation.",
+        "Portfolio: market-neutral long/short construction with equal-volatility weighting, volatility targeting and Equal Risk Contribution risk balancing.",
+        "Validation: strict out-of-sample and walk-forward evaluation; performance reported net of transaction costs and slippage.",
+        "Result: 0.9–1.5 Sharpe ratio net of costs and slippage across strategy variants, plus a modular Python backtesting engine for risk-adjusted performance analysis.",
+        "Only verified metrics are reported. No additional performance figures are fabricated."
+      ]
+    },
+    {
+      id: "llm-chatbot",
+      category: "AI/ML",
+      title: "Cross-Regional LLM Customer Chatbot Service",
+      company: "United Overseas Bank (Graduate Programme Capstone)",
+      date: "Sep 2024 – Nov 2024",
+      description: "Multilingual AI chatbot incorporating NLP and LLMs to deliver personalised customer service for banking clients across regions — production service in Python/FastAPI with a ReactJS frontend, A/B testing and evaluation frameworks.",
+      technologies: ["Project Management","Python","FastAPI","ReactJS","JavaScript","Ollama","LLM","A/B Testing","Evaluation Frameworks"],
+      result: "Overall champion, graduate programme capstone pitch",
+      github: "https://github.com/KevinTan1203/TDP-LLM-Chatbot",
+      full: [
+        "Built a cross-regional, multilingual LLM-powered customer chatbot service for banking clients.",
+        "Backend in Python with FastAPI; frontend in ReactJS; local model serving and orchestration via Ollama.",
+        "Designed A/B testing and evaluation frameworks for response quality control.",
+        "Our team was named overall champion for the graduate programme capstone project pitch."
+      ]
+    },
+    {
+      id: "momentum-ls",
+      category: "Quant",
+      title: "Momentum-Based Long/Short Equity Trading System",
+      company: "National University of Singapore",
+      date: "Aug 2023 – Dec 2023",
+      description: "Preliminary backtesting of a systematic long/short trading strategy on a portfolio of U.S. equities exhibiting considerable price momentum, built in Python with a roadmap to extend across further asset classes and exchanges.",
+      technologies: ["Systematic Trading","Python","Backtesting"],
+      result: "Systematic long/short momentum strategy, U.S. equities",
+      github: null,
+      full: [
+        "Backtested a systematic long/short strategy on U.S. securities exhibiting significant price momentum.",
+        "Built the research and backtesting pipeline in Python as a group project.",
+        "Scoped for future extension to broader asset classes and exchanges beyond U.S. equities."
+      ]
+    },
+    {
+      id: "credit-portfolio",
+      category: "Finance",
+      title: "Corporate Credit Risk Evaluation & Portfolio Strategy",
+      company: "National University of Singapore",
+      date: "Jan 2024 – May 2024",
+      description: "Quantitative and qualitative analysis of corporate credit risk across selected companies using ~5 years of financial statements, key ratios and industry developments, concluding with corporate bond recommendations by risk appetite.",
+      technologies: ["Credit Risk Analysis","Financial Statement Analysis","Fixed Income","Portfolio Strategy"],
+      result: "Corporate bond recommendations by risk appetite",
+      github: null,
+      full: [
+        "Analysed the credit risk of selected companies using ~5 years of financial statements and key financial ratios.",
+        "Layered in qualitative industry developments alongside the quantitative analysis.",
+        "Concluded with recommended corporate bonds for incorporation into an investment portfolio, segmented by risk appetite."
+      ]
+    },
+    {
+      id: "ticketing",
+      category: "Blockchain",
+      title: "Decentralised Ticketing System",
+      company: "National University of Singapore",
+      date: "Aug 2023 – Dec 2023",
+      description: "Blockchain-based ticketing platform addressing hidden transaction fees and bot-driven scalping in the ticket resale market, using smart contracts to enforce transparent pricing and fairer primary access.",
+      technologies: ["Solidity","Smart Contracts","Project Management","Blockchain"],
+      result: "Smart-contract ticketing prototype on Ethereum",
+      github: "https://github.com/Buwoo/IS4302-Ticketmaster/tree/main",
+      full: [
+        "Addressed two pain points in ticket sale/resale: undisclosed commissions and hidden costs layered through the ticket lifecycle, and bot-driven scalping that locks genuine fans out of fair-priced tickets.",
+        "Applied blockchain technology and smart contracts (Solidity) as the mechanism to enforce transparent pricing and reduce scalper access.",
+        "Built and documented as a group project for NUS course IS4302 (Blockchain & Distributed Ledger Technologies)."
+      ]
+    },
+    {
+      id: "homebuilder",
+      category: "Research",
+      title: "US Homebuilders Analysis, Market Research & Intelligence",
+      company: "Point72 Asset Management",
+      date: "Mar 2023 – Apr 2023",
+      description: "Data-driven investment research on U.S. homebuilders (D.R. Horton, Lennar, PulteGroup) blending macro and alternative data to evaluate KPIs and forecast housing starts for market intelligence.",
+      technologies: ["Market Research","Presentation Skills","Python","FRED","Census","NAHB","Zillow","Google Trends"],
+      result: "Macro + alternative-data investment research",
+      github: null,
+      full: [
+        "Evaluated KPIs including Housing Starts, Revenue, Gross Margin and Backlog for D.R. Horton, Lennar and PulteGroup.",
+        "Blended public macro data (Census, FRED, NAHB) with alternative data (Zillow, Google Trends) to model key drivers.",
+        "Predicted directional moves in New Privately-Owned Housing Units Started to guide forward-looking market intelligence."
+      ]
+    },
+    {
+      id: "credit-risk",
+      category: "Quant",
+      title: "Statistical Credit Risk Modelling",
+      company: "MariBank (SeaMoney) — NUS Business Analytics Capstone",
+      date: "Jan 2023 – May 2023",
+      description: "Probability-of-default modelling with statistical and machine-learning methods, hyperparameter tuning and out-of-sample validation, identifying credit-risk features with the strongest explanatory power.",
+      technologies: ["Python","scikit-learn","Machine Learning","Hyperparameter Tuning","Out-of-Sample Validation","Probability of Default"],
+      result: "Validated probability-of-default model",
+      github: null,
+      full: [
+        "Developed a model to identify credit-risk features with high explanatory power for probability of default.",
+        "Applied statistical and machine-learning methods with hyperparameter tuning and out-of-sample validation.",
+        "As part of the contractual agreement with the industry partner, the repository is not publicly disclosed."
+      ]
+    },
+    {
+      id: "esg",
+      category: "AI/ML",
+      title: "Predictive ESG Risk Modelling",
+      company: "National University of Singapore",
+      date: "Jan 2022 – May 2022",
+      description: "Machine-learning model estimating ESG risk ratings for companies not covered by traditional ESG data providers, aiming to make ESG scoring more broadly accessible.",
+      technologies: ["Time Management","Creative Problem Solving","Python","Machine Learning"],
+      result: "ML-based ESG rating estimation model",
+      github: null,
+      full: [
+        "Built a machine-learning model to estimate ESG risk ratings, motivated by the fact that ESG providers often don't cover smaller companies.",
+        "Targeted better access to ESG scoring, which tends to correlate with more favourable treatment from institutional investors and the public.",
+        "Delivered as a Web & Alternative Data Mining group project at NUS."
+      ]
+    },
+    {
+      id: "deliverpool",
+      category: "Software",
+      title: "Deliverpool — Group Food-Delivery Pooling App",
+      company: "National University of Singapore",
+      date: "Jan 2022 – May 2022",
+      description: "Full-stack application letting NUS students living on campus pool food-delivery orders across GrabFood, Deliveroo and Foodpanda to reduce per-order delivery costs.",
+      technologies: ["Time Management","Creative Problem Solving","Full-Stack Development"],
+      result: "Full-stack order-pooling application for campus residents",
+      github: null,
+      full: [
+        "Targeted NUS students in Halls/Residences, letting them pool orders across delivery platforms to reduce delivery costs.",
+        "Each pool corresponds to a restaurant on one of Singapore's three major food-delivery platforms.",
+        "Extended existing platform pool-order features into a more broadly accessible full-stack application."
+      ]
+    }
+  ],
+
+  projectFilters: ["All","Quant","Trading","Finance","Software","AI/ML","Blockchain","Research"],
+
+  skills: [
+    {
+      group: "Quantitative Finance",
+      items: [
+        { name: "Statistical Arbitrage", used: ["stat-arb"] },
+        { name: "Time-Series Modelling", used: ["stat-arb"] },
+        { name: "Econometrics", used: [] },
+        { name: "Portfolio Construction", used: ["stat-arb","credit-portfolio"] },
+        { name: "Backtesting", used: ["stat-arb","momentum-ls"] },
+        { name: "Risk Modelling", used: ["stat-arb","credit-risk"] },
+        { name: "Credit Risk Analysis", used: ["credit-risk","credit-portfolio"] }
+      ]
+    },
+    {
+      group: "Trading",
+      items: [
+        { name: "OTC Execution", used: [] },
+        { name: "FX", used: [] },
+        { name: "Digital Assets", used: [] },
+        { name: "Arbitrage", used: ["stat-arb"] },
+        { name: "Hedging", used: [] },
+        { name: "VWAP", used: [] },
+        { name: "Liquidity Analysis", used: [] },
+        { name: "Market Microstructure", used: [] }
+      ]
+    },
+    {
+      group: "Programming",
+      items: [
+        { name: "Python", used: ["stat-arb","llm-chatbot","homebuilder","credit-risk","momentum-ls","esg"] },
+        { name: "SQL", used: ["homebuilder","credit-risk"] },
+        { name: "Java", used: [] },
+        { name: "R", used: [] },
+        { name: "JavaScript", used: ["llm-chatbot"] },
+        { name: "Solidity", used: ["ticketing"] }
+      ]
+    },
+    {
+      group: "Data / Engineering",
+      items: [
+        { name: "Pandas", used: ["stat-arb"] },
+        { name: "NumPy", used: ["stat-arb"] },
+        { name: "Scikit-Learn", used: ["stat-arb","credit-risk"] },
+        { name: "Linux", used: [] },
+        { name: "Git", used: [] },
+        { name: "Jenkins", used: [] },
+        { name: "REST APIs", used: ["llm-chatbot"] },
+        { name: "Databricks", used: [] },
+        { name: "Power BI", used: [] }
+      ]
+    },
+    {
+      group: "Blockchain & Web3",
+      items: [
+        { name: "Smart Contracts", used: ["ticketing"] },
+        { name: "Distributed Ledger Technologies", used: ["ticketing"] },
+        { name: "Ethereum", used: ["ticketing"] }
+      ]
+    },
+    {
+      group: "DevOps & Assurance",
+      items: [
+        { name: "DevOps", used: [] },
+        { name: "DevSecOps", used: [] },
+        { name: "Test Automation", used: [] },
+        { name: "Data Governance", used: [] },
+        { name: "Data Visualization", used: [] }
+      ]
+    },
+    {
+      group: "Leadership & Delivery",
+      items: [
+        { name: "Project Management", used: ["llm-chatbot"] },
+        { name: "Stakeholder Management", used: [] },
+        { name: "Team Leadership", used: [] },
+        { name: "Critical Thinking", used: [] }
+      ]
+    }
+  ],
+
+  awards: [
+    { title: "NUS Merit Scholarship", year: "2020 – 2024" },
+    { title: "Certificate in Quantitative Finance (WSQ Bootcamp)", year: "2026" },
+    { title: "Financial Analytics Specialisation (Distinction)", year: "2024" },
+    { title: "Applied Analytics Specialisation (Distinction)", year: "2024" },
+    { title: "Top Student, Blockchain & Distributed Ledger Technologies", year: "2024" },
+    { title: "School of Computing Dean's List", year: "2023 — Top 10%" },
+    { title: "NASA Exchange Scholarship", year: "2022 – 2023" },
+    { title: "Optiver Challenge Competition", year: "2023" },
+    { title: "BrainHack DSTA — Runner-Up, Most Innovative Idea", year: "2022" },
+    { title: "Grab Data Analytics Competition — Top 5", year: "2022" },
+    { title: "Letter of Commendation — Ethics in Computing", year: "2021" },
+    { title: "Jacob Ballas Scholars' Award", year: "2017" },
+    { title: "Ruth Wong Memorial Scholarship", year: "2017" },
+    { title: "SAF Letter of Appreciation", year: "2019" },
+    { title: "SAF Certificate of Excellence — Best Platoon Cadet", year: "2018" },
+    { title: "Singapore Mathematical Olympiad Society — Bronze Award", year: "2014" }
+  ],
+
+  currently: [
+    { label: "Trading", value: "Digital Assets & FX Execution", sub: "Institutional OTC" },
+    { label: "Research", value: "Systematic / Statistical Arbitrage", sub: "Market-Neutral" },
+    { label: "Building", value: "Quant Finance Tools & Market Visualisations", sub: "Interactive" },
+    { label: "Learning", value: "Market Microstructure · Derivatives · Quant Trading", sub: "Ongoing" }
+  ],
+
+  quant: {
+    strategy: "Market Neutral Statistical Arbitrage",
+    universe: "~50 Cryptocurrency Pairs",
+    signal: "Cross-sectional + Time-series Momentum",
+    portfolio: "Long / Short · Market Neutral",
+    risk: "Volatility Targeting + ERC",
+    validation: "Walk-Forward + Grid Search",
+    sharpe: 1.5,
+    sharpeNote: "Backtest Sharpe Ratio (0.9 – 1.5 range across strategy variants)",
+    flow: [
+      { label: "Data", desc: "Binance historical, 2020–2025" },
+      { label: "Signal Generation", desc: "Momentum features" },
+      { label: "Cross-Sectional Ranking", desc: "Pair relative strength" },
+      { label: "Portfolio Construction", desc: "Long / short neutral" },
+      { label: "Risk Balancing", desc: "Vol targeting + ERC" },
+      { label: "Execution", desc: "Net of costs & slippage" },
+      { label: "Performance", desc: "Walk-forward Sharpe" }
+    ]
+  }
+};
+
+/* ============================================================
+   THEME
+   ============================================================ */
+const THEMES = ["dark","light"];
+function setTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  localStorage.setItem("kt-theme", t);
+  document.getElementById("themeIcon").innerHTML = t === "dark"
+    ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/>'
+    : '<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>';
+}
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  setTheme(cur === "dark" ? "light" : "dark");
+});
+setTheme(localStorage.getItem("kt-theme") || "dark");
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+const ICONS = {
+  trade: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8M21 7v4h-4"/></svg>',
+  research: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>',
+  build: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a4 4 0 01-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 015.4-5.4z"/></svg>',
+  linkedin: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-3-1.8-3s-2 1.4-2 2.9V21H9z"/></svg>',
+  github: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 015 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.8v2.6c0 .3.2.6.7.5A10 10 0 0012 2z"/></svg>',
+  email: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+  resume: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>'
+};
+
+/* ============================================================
+   RENDERERS
+   ============================================================ */
+function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
+
+function renderHero() {
+  const p = SITE_CONFIG.profile;
+  document.getElementById('heroName').innerHTML = p.name.toUpperCase() + '<span class="blink">_</span>';
+  document.getElementById('heroSub').textContent = p.headline;
+  document.getElementById('heroBio').textContent = p.bio;
+  document.getElementById('heroRole').innerHTML = '<span class="pulse"></span> ' + p.currentRole + ' @ ' + p.currentCompany;
+  document.getElementById('navLinkedin').href = p.linkedin;
+  document.getElementById('footerLeft').textContent = p.name.toUpperCase().replace(' ','.') + ' // QUANT TERMINAL v1.0';
+
+  const links = document.getElementById('heroLinks');
+  links.innerHTML = '';
+  links.appendChild(el(`<a class="btn" href="${p.linkedin}" target="_blank" rel="noopener">${ICONS.linkedin} LinkedIn</a>`));
+  links.appendChild(el(`<a class="btn" href="${p.github}" target="_blank" rel="noopener">${ICONS.github} GitHub</a>`));
+  links.appendChild(el(`<a class="btn" href="${p.email === '[EMAIL]' ? '#' : 'mailto:'+p.email}">${ICONS.email} Email</a>`));
+  links.appendChild(el(`<button class="btn" id="heroResumeBtn">${ICONS.resume} Resume</button>`));
+  document.getElementById('heroResumeBtn').addEventListener('click', openResume);
+}
+
+function renderKpis() {
+  const grid = document.getElementById('kpis');
+  grid.innerHTML = '';
+  SITE_CONFIG.kpis.forEach(k => {
+    grid.appendChild(el(`
+      <div class="kpi reveal">
+        <div class="kpi-label">${k.label}</div>
+        <div class="kpi-value">${k.value}</div>
+        <div class="kpi-sub">${k.sub}</div>
+      </div>`));
+  });
+}
+
+function renderPillars() {
+  const grid = document.getElementById('pillars');
+  grid.innerHTML = '';
+  SITE_CONFIG.pillars.forEach(p => {
+    grid.appendChild(el(`
+      <div class="pillar reveal">
+        <div class="pillar-icon">${ICONS[p.icon] || ''}</div>
+        <h3>${p.title}</h3>
+        <p>${p.text}</p>
+      </div>`));
+  });
+}
+
+function renderTimeline() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  SITE_CONFIG.experience.forEach((e, i) => {
+    const node = el(`
+      <div class="tl-node reveal" data-i="${i}">
+        <div class="tl-head">
+          <div>
+            <div class="tl-year">${e.year}</div>
+            <div class="tl-role">${e.role}</div>
+            <div class="tl-co">${e.company}${e.location ? ' · ' + e.location : ''}</div>
+          </div>
+          <svg class="tl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="tl-body">
+          <div class="tl-body-inner">
+            <div class="tl-desc">${e.description}</div>
+            <div class="tl-section-label">Responsibilities</div>
+            <ul style="margin:4px 0 0 18px;font-size:13px;color:var(--text-dim)">
+              ${e.responsibilities.map(r => `<li style="margin-bottom:5px">${r}</li>`).join('')}
+            </ul>
+            <div class="tl-section-label" style="margin-top:14px">Technologies</div>
+            <div class="tl-tags">${e.technologies.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+            <div class="tl-section-label" style="margin-top:14px">Market Exposure</div>
+            <div style="font-size:13px;color:var(--text-dim)">${e.market}</div>
+          </div>
+        </div>
+      </div>`);
+    node.addEventListener('click', () => node.classList.toggle('active'));
+    tl.appendChild(node);
+  });
+}
+
+function renderSpotlight() {
+  const s = SITE_CONFIG.spotlight;
+  const card = document.getElementById('spotlightCard');
+  card.innerHTML = `
+    <div class="spotlight-head">
+      <span class="spotlight-badge">${s.badge}</span>
+      <span class="spotlight-title">${s.title}</span>
+    </div>
+    ${s.body.map(p => `<p>${p}</p>`).join('')}
+    ${s.link ? `<a href="${s.link.url}" target="_blank" rel="noopener" style="font-family:var(--font);font-size:12.5px;display:inline-block;margin-top:6px">${ICONS.linkedin} ${s.link.label} →</a>` : ''}
+  `;
+}
+
+function renderEducation() {
+  const grid = document.getElementById('eduGrid');
+  grid.innerHTML = '';
+  SITE_CONFIG.education.forEach(e => {
+    grid.appendChild(el(`
+      <div class="edu-card reveal">
+        <div class="edu-head">
+          <div>
+            <div class="edu-degree">${e.degree}</div>
+            <div class="edu-school">${e.school}</div>
+          </div>
+          <div class="edu-period">${e.period}</div>
+        </div>
+        <div class="edu-detail">${e.detail}</div>
+        ${e.extra ? `<div class="edu-extra">${e.extra}</div>` : ''}
+        <div class="tl-tags">${e.areas.map(a => `<span class="tag">${a}</span>`).join('')}</div>
+      </div>`));
+  });
+}
+
+function renderCertifications() {
+  const grid = document.getElementById('certGrid');
+  grid.innerHTML = '';
+  SITE_CONFIG.certifications.forEach(c => {
+    grid.appendChild(el(`
+      <div class="cert-card reveal">
+        <div class="cert-title">${c.title}</div>
+        <div class="cert-issuer">${c.issuer}</div>
+        <div class="cert-date">${c.date}</div>
+      </div>`));
+  });
+}
+
+function renderQuant() {
+  const q = SITE_CONFIG.quant;
+  const spec = document.getElementById('qspec');
+  spec.innerHTML = '';
+  [
+    ['Strategy', q.strategy],
+    ['Asset Universe', q.universe],
+    ['Signal', q.signal],
+    ['Portfolio', q.portfolio],
+    ['Risk', q.risk],
+    ['Validation', q.validation]
+  ].forEach(([l,v]) => {
+    spec.appendChild(el(`<div class="qspec-item"><div class="qspec-label">${l}</div><div class="qspec-value">${v}</div></div>`));
+  });
+
+  const flow = document.getElementById('flow');
+  flow.innerHTML = '';
+  q.flow.forEach((s, i) => {
+    flow.appendChild(el(`
+      <div class="flow-step">
+        <div class="flow-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="flow-label">${s.label}</div>
+        <div class="flow-desc">${s.desc}</div>
+      </div>`));
+  });
+
+  // animated sharpe counter
+  animateNumber(document.getElementById('sharpeValue'), 0, q.sharpe, 1, 1200);
+
+  // allocation conceptual bar
+  const alloc = document.getElementById('allocChart');
+  alloc.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:16px">
+      <div style="display:flex;height:30px;border-radius:4px;overflow:hidden">
+        <div style="width:48%;background:var(--pos);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:10px;color:#0a0d12">LONG 48%</div>
+        <div style="width:4%;background:var(--bg-elev)"></div>
+        <div style="width:48%;background:var(--neg);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:10px;color:#fff">SHORT 48%</div>
+      </div>
+      <div style="margin-top:8px;font-family:var(--font);font-size:11px;color:var(--text-dim)">Net exposure ≈ 0 · Gross ≈ 96% · market-neutral</div>
+    </div>`;
+
+  // risk contribution equal bars
+  const risk = document.getElementById('riskChart');
+  const n = 6;
+  risk.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:16px">
+      <div style="display:flex;align-items:flex-end;gap:6px;height:80px">
+        ${Array(n).fill(0).map(() => `<div style="flex:1;height:100%;background:linear-gradient(180deg,var(--accent),var(--accent-soft));border-radius:3px"></div>`).join('')}
+      </div>
+      <div style="margin-top:8px;font-family:var(--font);font-size:11px;color:var(--text-dim)">Equal Risk Contribution — each position contributes ~equal variance</div>
+    </div>`;
+}
+
+function renderProjects() {
+  const filters = document.getElementById('filters');
+  filters.innerHTML = '';
+  SITE_CONFIG.projectFilters.forEach((f, i) => {
+    const b = el(`<button class="filter-btn ${i===0?'active':''}" data-f="${f}">${f}</button>`);
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      filterProjects(f);
+    });
+    filters.appendChild(b);
+  });
+  filterProjects('All');
+}
+
+function filterProjects(f) {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = '';
+  const list = SITE_CONFIG.projects.filter(p => f === 'All' || p.category === f);
+  list.forEach(p => {
+    if (p.featured) {
+      grid.appendChild(el(`
+        <div class="project-card featured reveal" data-id="${p.id}">
+          <div class="featured-left">
+            <div class="pc-cat">${p.category} · Featured</div>
+            <div class="pc-title" style="font-size:20px">${p.title}</div>
+            <div class="pc-co">${p.company} · ${p.date}</div>
+            <p class="pc-desc" style="margin-top:14px">${p.description}</p>
+            <div class="pc-tech">${p.technologies.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          </div>
+          <div class="featured-right">
+            <div class="sharpe-label">Backtest Sharpe (net)</div>
+            <div style="font-family:var(--font);font-size:40px;font-weight:700;color:var(--accent);line-height:1;margin:8px 0">0.9–1.5</div>
+            <div class="sharpe-note">Market Neutral · 50 Pairs</div>
+            <div style="margin-top:18px;font-family:var(--font);font-size:11px;color:var(--text-dim)">Net of transaction costs &amp; slippage · Walk-forward validated</div>
+          </div>
+        </div>`));
+    } else {
+      grid.appendChild(el(`
+        <div class="project-card reveal" data-id="${p.id}">
+          <div class="pc-cat">${p.category}</div>
+          <div class="pc-title">${p.title}</div>
+          <div class="pc-co">${p.company} · ${p.date}</div>
+          <p class="pc-desc">${p.description}</p>
+          <div class="pc-tech">${p.technologies.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          <div class="pc-result">${p.result}</div>
+        </div>`));
+    }
+  });
+  document.querySelectorAll('.project-card').forEach(c => {
+    c.addEventListener('click', () => openProject(c.dataset.id));
+  });
+  observeReveals();
+}
+
+function openProject(id) {
+  const p = SITE_CONFIG.projects.find(x => x.id === id);
+  if (!p) return;
+  const m = document.getElementById('modalContent');
+  m.innerHTML = `
+    <button class="modal-close" id="modalCloseBtn">✕</button>
+    <div class="modal-cat">${p.category} · ${p.date}</div>
+    <h3>${p.title}</h3>
+    <div class="modal-co">${p.company}</div>
+    <p>${p.description}</p>
+    <h4>Details</h4>
+    <ul style="margin:0 0 0 18px;font-size:13.5px;color:var(--text-dim)">
+      ${p.full.map(x => `<li style="margin-bottom:6px">${x}</li>`).join('')}
+    </ul>
+    <h4>Technologies</h4>
+    <div class="pc-tech">${p.technologies.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    <h4>Key Result</h4>
+    <p style="color:var(--accent);font-family:var(--font);font-size:13px">${p.result}</p>
+    ${p.github ? `<a class="btn" href="${p.github}" target="_blank" rel="noopener" style="margin-top:8px">${ICONS.github} View Project</a>` : `<div style="font-size:12px;color:var(--text-faint);font-family:var(--font)">[GITHUB_URL placeholder — link when available]</div>`}
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+function renderSkills() {
+  const grid = document.getElementById('skillsGrid');
+  grid.innerHTML = '';
+  SITE_CONFIG.skills.forEach(g => {
+    const group = el(`
+      <div class="skill-group">
+        <h4>${g.group}</h4>
+        <div class="skill-chips">
+          ${g.items.map(it => `<span class="skill-chip" data-skill="${it.name}" data-used='${JSON.stringify(it.used)}'>${it.name}</span>`).join('')}
+        </div>
+      </div>`);
+    grid.appendChild(group);
+  });
+  document.querySelectorAll('.skill-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.skill-chip').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      const used = JSON.parse(c.dataset.used);
+      const info = document.getElementById('skillInfo');
+      const projects = used.map(id => SITE_CONFIG.projects.find(p => p.id === id)).filter(Boolean);
+      if (projects.length) {
+        info.innerHTML = `<strong style="color:var(--text)">${c.dataset.skill}</strong> — used in: ${projects.map(p => `<span style="color:var(--accent)">${p.title}</span>`).join(', ')}.`;
+      } else {
+        info.innerHTML = `<strong style="color:var(--text)">${c.dataset.skill}</strong> — applied in professional experience (see career timeline).`;
+      }
+      info.classList.add('show');
+    });
+  });
+}
+
+function renderCurrently() {
+  const grid = document.getElementById('currentlyGrid');
+  grid.innerHTML = '';
+  SITE_CONFIG.currently.forEach(c => {
+    grid.appendChild(el(`
+      <div class="curr-card reveal">
+        <div class="curr-label">${c.label}</div>
+        <div class="curr-value">${c.value}</div>
+        <div class="curr-sub">${c.sub}</div>
+      </div>`));
+  });
+}
+
+function renderContact() {
+  const p = SITE_CONFIG.profile;
+  const c = document.getElementById('contactLinks');
+  c.innerHTML = '';
+  c.appendChild(el(`<a class="contact-link" href="${p.linkedin}" target="_blank" rel="noopener">${ICONS.linkedin} LinkedIn</a>`));
+  c.appendChild(el(`<a class="contact-link" href="${p.github}" target="_blank" rel="noopener">${ICONS.github} GitHub</a>`));
+  c.appendChild(el(`<a class="contact-link" href="${p.email === '[EMAIL]' ? '#' : 'mailto:'+p.email}">${ICONS.email} Email</a>`));
+  c.appendChild(el(`<button class="contact-link" id="contactResumeBtn">${ICONS.resume} Resume</button>`));
+  document.getElementById('contactResumeBtn').addEventListener('click', openResume);
+}
+
+/* ============================================================
+   RESUME OVERLAY
+   ============================================================ */
+function openResume() {
+  const p = SITE_CONFIG.profile;
+  const r = document.getElementById('resumeContent');
+  r.innerHTML = `
+    <button class="modal-close" id="resumeCloseBtn">✕</button>
+    <div class="modal-cat">Resume</div>
+    <h3 style="font-size:28px">${p.name}</h3>
+    <div class="modal-co" style="font-size:14px">${p.headline}</div>
+    <div style="font-family:var(--font);font-size:12px;color:var(--text-dim);margin-bottom:6px">${p.currentRole} @ ${p.currentCompany} · ${p.location}</div>
+    <div style="font-family:var(--font);font-size:11px;color:var(--text-faint)">${p.email} · ${p.linkedin}</div>
+
+    <div class="resume-section">
+      <h4>Education</h4>
+      ${SITE_CONFIG.education.map(e => `
+        <div class="resume-item">
+          <div class="resume-item-head">
+            <div><div class="resume-item-title">${e.degree}</div><div class="resume-item-co">${e.school}</div></div>
+            <div class="resume-item-date">${e.period}</div>
+          </div>
+          <div class="resume-item-desc">${e.detail}</div>
+          <div class="tl-tags">${e.areas.map(a => `<span class="tag">${a}</span>`).join('')}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="resume-section">
+      <h4>Experience</h4>
+      ${SITE_CONFIG.experience.map(e => `
+        <div class="resume-item">
+          <div class="resume-item-head">
+            <div><div class="resume-item-title">${e.role}</div><div class="resume-item-co">${e.company}</div></div>
+            <div class="resume-item-date">${e.year}</div>
+          </div>
+          <div class="resume-item-desc">${e.description}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="resume-section">
+      <h4>Projects</h4>
+      ${SITE_CONFIG.projects.map(p => `
+        <div class="resume-item">
+          <div class="resume-item-head">
+            <div><div class="resume-item-title">${p.title}</div><div class="resume-item-co">${p.company}</div></div>
+            <div class="resume-item-date">${p.date}</div>
+          </div>
+          <div class="resume-item-desc">${p.result}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="resume-section">
+      <h4>Skills</h4>
+      <div class="tl-tags">${SITE_CONFIG.skills.flatMap(g => g.items.map(i => i.name)).map(s => `<span class="tag">${s}</span>`).join('')}</div>
+    </div>
+
+    <div class="resume-section">
+      <h4>Certifications</h4>
+      ${SITE_CONFIG.certifications.map(c => `
+        <div class="resume-item">
+          <div class="resume-item-head">
+            <div><div class="resume-item-title">${c.title}</div><div class="resume-item-co">${c.issuer}</div></div>
+            <div class="resume-item-date">${c.date}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="resume-section">
+      <h4>Awards</h4>
+      ${SITE_CONFIG.awards.map(a => `
+        <div class="resume-item">
+          <div class="resume-item-head">
+            <div class="resume-item-title">${a.title}</div>
+            <div class="resume-item-date">${a.year}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="resume-actions">
+      <a class="btn btn-primary" href="${p.resume === '[RESUME_URL]' ? '#' : p.resume}" download="${p.resume === '[RESUME_URL]' ? false : 'Kevin-Tan-Resume.pdf'}">${ICONS.resume} Download Resume</a>
+      ${p.resume === '[RESUME_URL]' ? '<span style="font-family:var(--font);font-size:11px;color:var(--text-faint)">[RESUME_URL placeholder — link PDF when available]</span>' : ''}
+    </div>
+  `;
+  document.getElementById('resumeOverlay').classList.add('show');
+  document.getElementById('resumeCloseBtn').addEventListener('click', () => document.getElementById('resumeOverlay').classList.remove('show'));
+}
+
+document.getElementById('resumeBtn').addEventListener('click', openResume);
+document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+document.getElementById('resumeOverlay').addEventListener('click', (e) => { if (e.target.id === 'resumeOverlay') e.currentTarget.classList.remove('show'); });
+
+/* ============================================================
+   ANIMATIONS — counters + reveals
+   ============================================================ */
+function animateNumber(node, from, to, decimals, dur) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { node.textContent = to.toFixed(decimals); return; }
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / dur, 1);
+    const v = from + (to - from) * (1 - Math.pow(1 - t, 3));
+    node.textContent = v.toFixed(decimals);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function observeReveals() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal:not(.in)').forEach(x => io.observe(x));
+}
+
+/* ============================================================
+   NAV — mobile + active highlight
+   ============================================================ */
+document.getElementById('menuToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+['home','experience','education','certifications','quant','projects','skills','about','contact'].forEach(id => {
+  const s = document.getElementById(id); if (s) navObserver.observe(s);
+});
+
+/* ============================================================
+   TERMINAL EASTER EGG
+   ============================================================ */
+const term = document.getElementById('terminal');
+const termScreen = document.getElementById('termScreen');
+const termInput = document.getElementById('termInput');
+document.getElementById('termFab').addEventListener('click', () => { term.classList.add('show'); termInput.focus(); termPrint('Kevin Tan // Quant Terminal. Type "help" for commands.'); });
+document.getElementById('termClose').addEventListener('click', () => term.classList.remove('show'));
+
+function termPrint(text) {
+  const lines = String(text).split('\n');
+  lines.forEach(l => {
+    const d = el(`<div class="term-line">${l}</div>`);
+    termScreen.appendChild(d);
+  });
+  termScreen.scrollTop = termScreen.scrollHeight;
+}
+function termPrompt(cmd) {
+  termScreen.appendChild(el(`<div class="term-line"><span class="term-prompt">$</span> ${cmd}</div>`));
+}
+
+const TERM_COMMANDS = {
+  help: () => 'Available commands:\nhelp · about · experience · projects · skills · quant · education · certifications · awards · contact · theme · clear',
+  about: () => `${SITE_CONFIG.profile.name}\n${SITE_CONFIG.profile.headline}\n${SITE_CONFIG.profile.bio}`,
+  experience: () => SITE_CONFIG.experience.map(e => `${e.year} — ${e.role} @ ${e.company}`).join('\n'),
+  projects: () => SITE_CONFIG.projects.map(p => `[${p.category}] ${p.title} — ${p.result}`).join('\n'),
+  skills: () => SITE_CONFIG.skills.map(g => `${g.group}: ${g.items.map(i=>i.name).join(', ')}`).join('\n'),
+  quant: () => {
+    const q = SITE_CONFIG.quant;
+    return `${q.strategy}\nUniverse: ${q.universe}\nSignal: ${q.signal}\nPortfolio: ${q.portfolio}\nRisk: ${q.risk}\nValidation: ${q.validation}\nBacktest Sharpe: ${q.sharpe}`;
+  },
+  education: () => SITE_CONFIG.education.map(e => `${e.degree}\n${e.school} · ${e.period}\n${e.detail}`).join('\n'),
+  certifications: () => SITE_CONFIG.certifications.map(c => `${c.title} — ${c.issuer} (${c.date})`).join('\n'),
+  awards: () => SITE_CONFIG.awards.map(a => `${a.title} (${a.year})`).join('\n'),
+  contact: () => `LinkedIn: ${SITE_CONFIG.profile.linkedin}\nGitHub: ${SITE_CONFIG.profile.github}\nEmail: ${SITE_CONFIG.profile.email}`,
+  theme: () => { const c = document.documentElement.getAttribute('data-theme'); setTheme(c==='dark'?'light':'dark'); return 'theme toggled -> ' + (c==='dark'?'light':'dark'); },
+  clear: () => { termScreen.innerHTML = ''; return ''; }
+};
+
+termInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = termInput.value.trim().toLowerCase();
+    termPrompt(termInput.value);
+    termInput.value = '';
+    if (!cmd) return;
+    if (TERM_COMMANDS[cmd]) {
+      const out = TERM_COMMANDS[cmd]();
+      if (out) termPrint(out);
+    } else {
+      termPrint(`command not found: ${cmd} — type "help"`);
+    }
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderHero();
+renderKpis();
+renderPillars();
+renderTimeline();
+renderSpotlight();
+renderEducation();
+renderCertifications();
+renderQuant();
+renderProjects();
+renderSkills();
+renderCurrently();
+renderContact();
+observeReveals();
+</script>
+</body>
+</html>
