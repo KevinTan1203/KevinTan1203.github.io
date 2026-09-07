@@ -334,6 +334,24 @@
         height: 1.5px;
         background: var(--accent);
       }
+      #skills .sec-eyebrow {
+        color: #ffffff;
+      }
+      #skills .sec-eyebrow .dash {
+        background: #ffffff;
+      }
+      #quant .sec-eyebrow {
+        color: #ffffff;
+      }
+      #quant .sec-eyebrow .dash {
+        background: #ffffff;
+      }
+      #experience .sec-eyebrow {
+        color: #000000;
+      }
+      #experience .sec-eyebrow .dash {
+        background: #000000;
+      }
       .sec-title {
         font-family: var(--font-heading);
         font-size: 2rem;
@@ -1348,6 +1366,35 @@
         font-style: italic;
         font-weight: 500;
       }
+      #quant .qcard,
+      #quant .quant-flow {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      #quant .qcard .l,
+      #quant .qcard .v,
+      #quant .qstep .lbl,
+      #quant .qstep .d,
+      #quant .quant-note {
+        color: rgba(255, 255, 255, 0.92);
+      }
+      #quant .quant-sharpe {
+        background: rgba(255, 255, 255, 0.42);
+        border-color: rgba(13, 39, 68, 0.45);
+      }
+      #quant .quant-sharpe .l,
+      #quant .quant-sharpe .v {
+        color: var(--accent);
+      }
+      #quant .quant-sharpe .n {
+        color: var(--fg-muted);
+      }
+      #quant .qstep .n {
+        color: rgba(255, 255, 255, 0.95);
+      }
+      #quant .qstep {
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+      }
 
       /* SKILLS */
       .skills-grid {
@@ -1403,6 +1450,20 @@
         color: var(--fg-faint);
         font-weight: 600;
       }
+      #skills .skill-col {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      #skills .skill-col h4,
+      #skills .skill-row .n {
+        color: rgba(255, 255, 255, 0.95);
+      }
+      #skills .skill-row {
+        border-top-color: rgba(255, 255, 255, 0.2);
+      }
+      #skills .skill-row .lvl {
+        color: rgba(255, 255, 255, 0.78);
+      }
       .bars {
         display: flex;
         gap: 2px;
@@ -1416,6 +1477,12 @@
       }
       .bars i.on {
         background: var(--accent);
+      }
+      #skills .bars i {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      #skills .bars i.on {
+        background: rgba(255, 255, 255, 0.9);
       }
       .bars i:nth-child(1) {
         height: 4px;
@@ -1447,7 +1514,7 @@
         font-size: 0.6875rem;
         letter-spacing: 0.22em;
         text-transform: uppercase;
-        color: #7eb4f0;
+        color: #21140d;
         font-weight: 700;
         margin-bottom: 1.25rem;
         display: flex;
@@ -1458,7 +1525,7 @@
       .cred-eyebrow .dash {
         width: 1.5rem;
         height: 1.5px;
-        background: #7eb4f0;
+        background: #21140d;
       }
       .cred-title {
         font-family: var(--font-heading);
@@ -1479,19 +1546,29 @@
         display: grid;
         gap: 2.5rem;
       }
+      .cred-grid-bare > .reveal {
+        padding: 1.25rem;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+      }
       @media (min-width: 768px) {
         .cred-grid-bare {
           grid-template-columns: 1fr 1fr;
         }
       }
       .cred-col-lbl {
+        display: inline-block;
         font-family: var(--font-mono);
         font-size: 0.575rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: #7eb4f0;
+        color: #ffffff;
         font-weight: 700;
         margin-bottom: 1rem;
+        padding: 0.4rem 0.65rem;
+        background: rgba(0, 0, 0, 0.42);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
       }
       .cred-list-bare {
@@ -1514,7 +1591,7 @@
         font-family: var(--font-mono);
         font-size: 0.575rem;
         letter-spacing: 0.1em;
-        color: #9bb0c8;
+        color: #f4f6f8;
         text-align: right;
         white-space: nowrap;
         font-weight: 600;
